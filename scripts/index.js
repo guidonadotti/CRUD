@@ -1,30 +1,29 @@
-const USUARIOS = "https://6364250f8a3337d9a2f256de.mockapi.io/users/" + ""
-const BOTON_BUSCAR=document.getElementById("btnGet1")
-const BOTON_AGREGAR=document.getElementById("btnPost")
-const BOTON_MODIFICAR=document.getElementById("btnSendChanges")
-const BOTON_BORRAR=document.getElementById("btnDelete")
+const USUARIOS = "https://6364250f8a3337d9a2f256de.mockapi.io/users/";
+const BOTON_BUSCAR = document.getElementById("btnGet1");
+const BOTON_AGREGAR = document.getElementById("btnPost");
+const BOTON_MODIFICAR = document.getElementById("btnSendChanges");
+const BOTON_BORRAR = document.getElementById("btnDelete");
 
-const INPUTS_INGRESAR = document.getElementById("post-box").querySelectorAll("input[type=text]")
-const INPUT_BUSCAR = document.getElementById("inputGet1Id")
-const INPUT_MODIFICAR = document.getElementById("inputPutId")
-const INPUT_BORRAR=document.getElementById("inputDelete")
-const INPUTS_MODAL = document.getElementById("dataModal").querySelectorAll("input[type=text]")
+const INPUT_BUSCAR = document.getElementById("inputGet1Id");
+const INPUT_MODIFICAR = document.getElementById("inputPutId");
+const INPUT_BORRAR = document.getElementById("inputDelete");
+const INPUTS_INGRESAR = document.getElementById("post-box").querySelectorAll("input[type=text]");
+const INPUTS_MODAL = document.getElementById("dataModal").querySelectorAll("input[type=text]");
 
+// Función que muestra la lista de usuarios en el HTML.
 function mostrarLista(datos) {
     document.getElementById("results").innerHTML = ""
     if (INPUT_BUSCAR.value == "") {
         for (let usuario of datos) {
-            document.getElementById("results").innerHTML +=
-                `
-                <li>ID: ${usuario.id}</li>
-                <li>name: ${usuario.name}</li>
-                <li>lastname: ${usuario.lastname}</li>
-                <hr>
+            document.getElementById("results").innerHTML += `
+            <li>ID: ${usuario.id}</li>
+            <li>name: ${usuario.name}</li>
+            <li>lastname: ${usuario.lastname}</li>
+            <hr>
             `
         }
     } else {
-        document.getElementById("results").innerHTML =
-            `
+        document.getElementById("results").innerHTML = `
         <li>ID: ${datos.id}</li>
         <li>name: ${datos.name}</li>
         <li>lastname: ${datos.lastname}</li>
@@ -32,36 +31,39 @@ function mostrarLista(datos) {
     }
 }
 
+// Funciones para spinner de carga.
 let showSpinner = function () {
     document.getElementById("spinner-wrapper").style.display = "block";
 }
 let hideSpinner = function () {
     document.getElementById("spinner-wrapper").style.display = "none";
 }
-let mostrarAlerta= function(){
+
+// Función para alertas de error.
+let mostrarAlerta = function () {
     swal("Algo salió mal", "¡Te mandaste cualquiera!", "error", { button: "😢", });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
     // Funciones para el botón buscar.
     BOTON_BUSCAR.addEventListener("click", function () {
-        showSpinner()
+        showSpinner();
         fetch(USUARIOS + INPUT_BUSCAR.value)
             .then(response => {
                 if (response.ok) {
-                    console.log(response);
                     return response.json()
                 } else {
                     mostrarAlerta();
-                    hideSpinner()
+                    hideSpinner();
                 }
             })
             .then((data) => {
-                mostrarLista(data)
-                hideSpinner()
+                mostrarLista(data);
+                hideSpinner();
             })
     })
-    
+
     // Habilitar o deshabilitar el botón ingresar.
     INPUTS_INGRESAR.forEach(input => {
         input.addEventListener("input", function () {
@@ -71,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Funciones para el botón agregar.
     BOTON_AGREGAR.addEventListener("click", function () {
-        showSpinner()
+        showSpinner();
         fetch(USUARIOS,
             {
                 method: "POST",
@@ -81,26 +83,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     lastname: INPUTS_INGRESAR[1].value
                 })
             }
-        ).then(function(data){
+        ).then(function (data) {
             if (data.ok) {
                 fetch(USUARIOS)
                     .then(response => response.json())
                     .then(data => mostrarLista(data))
                 hideSpinner()
-            }else{
+            } else {
                 mostrarAlerta();
-                hideSpinner()
+                hideSpinner();
             }
         }
         ).catch(function (error) {
             mostrarAlerta();
-            hideSpinner()
+            hideSpinner();
         })
     })
 
     // Habilitar o deshabilitar el botón modificar.
     INPUT_MODIFICAR.addEventListener("input", function () {
-        document.getElementById("btnPut").disabled = INPUT_MODIFICAR.value == ""
+        document.getElementById("btnPut").disabled = INPUT_MODIFICAR.value == "";
     })
 
     // Habilitar o deshabilitar el botón guardar (dentro del modal).
@@ -112,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Funciones para el botón modificar.
     BOTON_MODIFICAR.addEventListener("click", function () {
-        showSpinner()
+        showSpinner();
         let idAModificar = document.getElementById("inputPutId").value
         fetch(USUARIOS + idAModificar,
             {
@@ -124,31 +126,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
             }
         ).then(function (data) {
-            console.log(data);
             if (data.ok) {
                 fetch(USUARIOS)
                     .then(response => response.json())
                     .then(data => mostrarLista(data))
-                hideSpinner()
-            }else{
+                hideSpinner();
+            } else {
                 mostrarAlerta();
-                hideSpinner()  
+                hideSpinner();
             }
         })
             .catch(function (error) {
                 mostrarAlerta();
-                hideSpinner()
+                hideSpinner();
             })
     })
 
     // Habilitar o deshabilitar el botón eliminar.
     INPUT_BORRAR.addEventListener("input", function () {
-        BOTON_BORRAR.disabled = this.value == ""
+        BOTON_BORRAR.disabled = this.value == "";
     })
 
-    //Funciones para el botón borrar. 
+    // Funciones para el botón borrar. 
     BOTON_BORRAR.addEventListener("click", function () {
-        showSpinner()
+        showSpinner();
         let idAEliminar = INPUT_BORRAR.value
         fetch(USUARIOS + idAEliminar,
             {
@@ -160,16 +161,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetch(USUARIOS)
                     .then(response => response.json())
                     .then(data => mostrarLista(data))
-                hideSpinner()
+                hideSpinner();
             } else {
                 mostrarAlerta();
-                hideSpinner()
+                hideSpinner();
             }
         }).catch(function (error) {
             mostrarAlerta();
-            hideSpinner()
+            hideSpinner();
         })
-
-
     })
 })
