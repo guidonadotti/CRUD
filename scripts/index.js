@@ -1,4 +1,4 @@
-const USUARIOS = "https://6364250f8a3337d9a2f256de.mockapi.io/users/";
+const USUARIOS = "http://localhost:3000/usuarios/";
 const BOTON_BUSCAR = document.getElementById("btnGet1");
 const BOTON_AGREGAR = document.getElementById("btnPost");
 const BOTON_GUARDAR = document.getElementById("btnSendChanges");
